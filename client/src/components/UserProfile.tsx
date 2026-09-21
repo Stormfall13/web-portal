@@ -13,7 +13,9 @@ export default function UserProfile({
     <section>
       <h2>{name}</h2>
 
-      <Button onClick={onLogout}>
+      <Button 
+        type="button"
+        onClick={onLogout}>
         Logout
       </Button>
     </section>
