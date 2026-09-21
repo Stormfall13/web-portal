@@ -7,13 +7,13 @@ type ButtonProps = {
 export default function Button({
   children,
   onClick,
-  disabled,
+  disabled = false,
 }: ButtonProps) {
   return (
     <button
-      className={`primary` disabled? : 'disabled' : ''}
+      className={ disabled ? 'primary disabled' : 'disabled'}
       onClick={onClick}
-      disabled
+      disabled={disabled}
     >
       {children}
     </button>
