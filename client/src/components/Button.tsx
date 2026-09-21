@@ -11,7 +11,7 @@ export default function Button({
 }: ButtonProps) {
   return (
     <button
-      className={ disabled ? 'primary disabled' : 'disabled'}
+      className={ disabled ? 'primary disabled' : 'primary' }
       onClick={onClick}
       disabled={disabled}
     >
