@@ -45,3 +45,123 @@ test("submits email and password", () => {
     "123456"
   );
 });
+
+test("email is required", () => {
+  render(
+    <LoginForm onSubmit={() => {}}/>
+  );
+
+  const loginButton = screen.getByRole("button", {
+    name: "Login"
+  });
+  
+  fireEvent.click(loginButton);
+
+  const error = screen.getByText("Email is required");
+
+  expect(error).toBeInTheDocument();
+});
+
+test("password is required", () => {
+  render(
+    <LoginForm onSubmit={() => {}}/>
+  );
+
+  const loginButton = screen.getByRole("button", {
+    name: "Login"
+  });
+  
+  fireEvent.click(loginButton);
+
+  const error = screen.getByText("Password is required");
+
+  expect(error).toBeInTheDocument();
+});
+
+
+test("does not submit invalid form", () => {
+  const onSubmit = jest.fn();
+
+  render(
+    <LoginForm
+      onSubmit={onSubmit}
+    />
+  );
+
+  const loginButton = screen.getByRole("button", {
+    name: "Login"
+  });
+
+  fireEvent.click(loginButton);
+
+  expect(onSubmit).not.toHaveBeenCalled();
+});
+
+test("cancel invalid email", () => {
+  const onSubmit = jest.fn();
+
+  render(
+    <LoginForm
+      onSubmit={onSubmit}
+    />
+  );
+
+  const emailInput = screen.getByRole("textbox", {
+    name: "Email"
+  });
+
+  const loginButton = screen.getByRole("button", {
+    name: "Login"
+  });
+
+  fireEvent.click(loginButton);
+
+  const error = screen.getByText("Email is required");
+
+  expect(onSubmit).not.toHaveBeenCalled();
+  expect(error).toBeInTheDocument();
+
+
+  fireEvent.change(emailInput, {
+    target: { value: "alex@gmail.com" }
+  });
+
+  const errorValid = screen.queryByText("Email is required");
+
+  expect(errorValid).not.toBeInTheDocument();
+
+});
+
+
+test("cancel invalid password", () => {
+  const onSubmit = jest.fn();
+
+  render(
+    <LoginForm
+      onSubmit={onSubmit}
+    />
+  );
+
+  const passwordInput = screen.getByLabelText("Password");
+
+  const loginButton = screen.getByRole("button", {
+    name: "Login"
+  });
+
+  fireEvent.click(loginButton);
+
+  const error = screen.getByText("Password is required");
+
+  expect(onSubmit).not.toHaveBeenCalled();
+  expect(error).toBeInTheDocument();
+
+
+  fireEvent.change(passwordInput, {
+    target: { value: "123456" }
+  });
+
+  const errorValid = screen.queryByText("Password is required");
+
+  expect(errorValid).not.toBeInTheDocument();
+
+});
