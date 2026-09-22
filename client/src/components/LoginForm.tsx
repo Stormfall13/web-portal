@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Button from "./Button";
 
+import styles from "./LoginForm.module.css";
+
 type LoginFormProps = {
   onSubmit: (
     email: string,
@@ -12,25 +14,70 @@ export default function LoginForm({
   onSubmit
 }: LoginFormProps){
 
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  
 
   return (
-    <form onSubmit={(event) => {
+    <form 
+    className={styles.form} 
+    onSubmit={(event) => {
       event.preventDefault();
+
+      let hasError = false;
+
+      if (email === "") {
+        setEmailError("Email is required");
+        hasError = true;
+      }
+
+      if (password === "") {
+        setPasswordError("Password is required");
+        hasError = true;
+      }
+
+      if (hasError) {
+        return;
+      }
+      
       onSubmit(email, password);
     }}>
-      <input 
-      type="email" 
-      onChange={(event) => setEmail(event.target.value)} 
-      value={email}
-      aria-label="Email"/>
-      <input 
-      type="password" 
-      onChange={(event) => setPassword(event.target.value)}
-      value={password}
-      aria-label="Password"/>
-      <Button type="submit">Login</Button>
+      <div className={styles.wrapper__input}>
+        <label className={styles.label__input}>Email</label>
+          <input
+          className={`${styles.input} ${emailError ? styles.input__err : ""}`}
+          type="email" 
+          onChange={(event) => {
+            setEmail(event.target.value);
+            setEmailError("")
+          }} 
+          value={email}
+          aria-label="Email"
+          />
+          {emailError && (
+            <span className={styles.error}>{emailError}</span>
+          )}
+        <label className={styles.label__input}>Password</label>
+          <input
+          className={`${styles.input} ${passwordError ? styles.input__err : ""}`} 
+          type="password" 
+          onChange={(event) => {
+            setPassword(event.target.value)
+            setPasswordError("")
+          }}
+          value={password}
+          aria-label="Password"/>
+          {passwordError && (
+            <span className={styles.error}>{passwordError}</span>
+          )}
+        <Button 
+          className={styles.button__login} 
+          type="submit">Login</Button>
+      </div>
     </form>
   )
 };
