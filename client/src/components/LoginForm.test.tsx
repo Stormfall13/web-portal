@@ -165,3 +165,52 @@ test("cancel invalid password", () => {
   expect(errorValid).not.toBeInTheDocument();
 
 });
+
+
+test("renders loading text when isLoading is true", () => {
+  render (
+    <LoginForm 
+      onSubmit={() => {}}
+      isLoading={true}
+    />
+  );
+
+  const loginButton = screen.getByRole("button", {
+    name: "Loading..."
+  });
+
+  expect(loginButton).toBeInTheDocument();
+});
+
+test("button is disabled when loading", () => {
+  render (
+    <LoginForm 
+      onSubmit={() => {}}
+      isLoading={true}
+    />
+  );
+  
+  const loginButton = screen.getByRole("button", {
+    name: "Loading..."
+  });
+
+  expect(loginButton).toBeDisabled();
+});
+
+
+test("does not submit again when loading", () => {
+  const onSubmit = jest.fn();
+
+  const { container } = render(
+  <LoginForm
+    onSubmit={onSubmit}
+    isLoading={true}
+  />
+  );
+
+  const form = container.querySelector("form");
+
+  fireEvent.submit(form!);
+
+  expect(onSubmit).not.toHaveBeenCalled();
+});
