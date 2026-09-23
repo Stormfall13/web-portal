@@ -214,3 +214,66 @@ test("does not submit again when loading", () => {
 
   expect(onSubmit).not.toHaveBeenCalled();
 });
+
+test("email input has no error description initially", () => {
+  render(<LoginForm onSubmit={() => {}} />);
+
+  const emailInput = screen.getByRole("textbox", {
+    name: "Email"
+  });
+
+  expect(emailInput).not.toHaveAttribute("aria-describedby");
+});
+
+
+test("email input gets error description", () => {
+  render (
+    <LoginForm 
+      onSubmit={() => {}}
+    />
+  );
+
+  const emailInput = screen.getByRole("textbox", {
+    name: "Email"
+  });
+
+  const loginButton = screen.getByRole("button", {
+    name: "Login"
+  });
+
+  fireEvent.click(loginButton);
+
+  expect(emailInput).toHaveAttribute(
+    "aria-describedby",
+    "email-error"
+  );
+});
+
+test("password input has no error description initially", () => {
+  render(<LoginForm onSubmit={() => {}} />);
+
+  const passwordInput = screen.getByLabelText("Password");
+
+  expect(passwordInput).not.toHaveAttribute("aria-describedby");
+});
+
+test("password input gets error description", () => {
+  render (
+    <LoginForm 
+      onSubmit={() => {}}
+    />
+  );
+
+  const passwordInput = screen.getByLabelText("Password");
+
+  const loginButton = screen.getByRole("button", {
+    name: "Login"
+  });
+
+  fireEvent.click(loginButton);
+
+  expect(passwordInput).toHaveAttribute(
+    "aria-describedby",
+    "password-error"
+  );
+});
