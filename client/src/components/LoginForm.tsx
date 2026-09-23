@@ -53,7 +53,7 @@ export default function LoginForm({
       onSubmit(email, password);
     }}>
       <div className={styles.wrapper__input}>
-        <label className={styles.label__input}>Email</label>
+        <label htmlFor="email" className={styles.label__input}>Email</label>
           <input
           className={`${styles.input} ${emailError ? styles.input__err : ""}`}
           type="email" 
@@ -62,12 +62,13 @@ export default function LoginForm({
             setEmailError("")
           }} 
           value={email}
-          aria-label="Email"
+          id="email"
+          aria-describedby={emailError ? "email-error" : undefined}
           />
           {emailError && (
-            <span className={styles.error}>{emailError}</span>
+            <span id="email-error" className={styles.error}>{emailError}</span>
           )}
-        <label className={styles.label__input}>Password</label>
+        <label htmlFor="password" className={styles.label__input}>Password</label>
           <input
           className={`${styles.input} ${passwordError ? styles.input__err : ""}`} 
           type="password" 
@@ -76,9 +77,11 @@ export default function LoginForm({
             setPasswordError("")
           }}
           value={password}
-          aria-label="Password"/>
+          id="password"
+          aria-describedby={passwordError ? "password-error" : undefined}
+          />
           {passwordError && (
-            <span className={styles.error}>{passwordError}</span>
+            <span id="password-error" className={styles.error}>{passwordError}</span>
           )}
         <Button 
           className={styles.button__login} 
