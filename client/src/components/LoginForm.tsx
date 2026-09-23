@@ -8,10 +8,12 @@ type LoginFormProps = {
     email: string,
     password: string
   ) => void;
+  isLoading?: boolean;
 };
 
 export default function LoginForm({
-  onSubmit
+  onSubmit,
+  isLoading = false,
 }: LoginFormProps){
 
   
@@ -41,6 +43,10 @@ export default function LoginForm({
       }
 
       if (hasError) {
+        return;
+      }
+
+      if (isLoading) {
         return;
       }
       
@@ -76,7 +82,10 @@ export default function LoginForm({
           )}
         <Button 
           className={styles.button__login} 
-          type="submit">Login</Button>
+          type="submit"
+          disabled={isLoading}>
+          {isLoading ? 'Loading...' : 'Login'}
+        </Button>
       </div>
     </form>
   )
