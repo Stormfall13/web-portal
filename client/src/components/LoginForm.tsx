@@ -22,10 +22,13 @@ export default function LoginForm({
   
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+
+  const [invalidEmail, setInvalidEmail] = useState("");
   
 
   return (
     <form 
+    noValidate
     className={styles.form} 
     onSubmit={(event) => {
       event.preventDefault();
@@ -34,6 +37,11 @@ export default function LoginForm({
 
       if (email === "") {
         setEmailError("Email is required");
+        hasError = true;
+      }
+
+      if(email !== "" && !email.includes("@")) {
+        setInvalidEmail("Invalid email format");
         hasError = true;
       }
 
@@ -55,18 +63,28 @@ export default function LoginForm({
       <div className={styles.wrapper__input}>
         <label htmlFor="email" className={styles.label__input}>Email</label>
           <input
-          className={`${styles.input} ${emailError ? styles.input__err : ""}`}
+          className={`${styles.input} ${emailError || invalidEmail ? styles.input__err : ""}`}
           type="email" 
           onChange={(event) => {
             setEmail(event.target.value);
-            setEmailError("")
+            setEmailError("");
+            setInvalidEmail("");
           }} 
           value={email}
           id="email"
-          aria-describedby={emailError ? "email-error" : undefined}
+          aria-describedby={
+            emailError 
+              ? "email-error" 
+              :  invalidEmail 
+              ? "invalid-email" 
+              : undefined
+          }
           />
           {emailError && (
             <span id="email-error" className={styles.error}>{emailError}</span>
+          )}
+          {invalidEmail && (
+            <span id="invalid-email" className={styles.error}>{invalidEmail}</span>
           )}
         <label htmlFor="password" className={styles.label__input}>Password</label>
           <input
