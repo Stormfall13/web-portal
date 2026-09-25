@@ -277,3 +277,102 @@ test("password input gets error description", () => {
     "password-error"
   );
 });
+
+test("shows invalid email format", () => {
+  const onSubmit = jest.fn();
+
+  render (
+    <LoginForm 
+      onSubmit={onSubmit}
+    />
+  );
+
+  const emailInput = screen.getByRole("textbox", {
+    name: "Email"
+  });
+  const passwordInput = screen.getByLabelText("Password");
+
+  const loginButton = screen.getByRole("button", {
+    name: "Login"
+  });
+  fireEvent.change(passwordInput, {
+    target: { value: "123456" }
+  });
+
+  fireEvent.change(emailInput, {
+    target: {value: 'alex'}
+  });
+
+  fireEvent.click(loginButton);
+
+  const errorInvalidEmailFormat = screen.getByText("Invalid email format");
+
+  expect(errorInvalidEmailFormat).toBeInTheDocument();
+  expect(onSubmit).not.toHaveBeenCalled();
+});
+
+
+test("submits valid email and password", () => {
+  const onSubmit = jest.fn();
+
+  render (
+    <LoginForm 
+      onSubmit={onSubmit}
+    />
+  );
+
+  const emailInput = screen.getByRole("textbox", {
+    name: "Email"
+  });
+  fireEvent.change(emailInput, {
+    target: { value: "alex@gmail.com"}
+  });
+  
+  const passwordInput = screen.getByLabelText("Password");
+  fireEvent.change(passwordInput, {
+    target: { value: "123456" }
+  });
+
+  const loginButton = screen.getByRole("button", {
+    name: "Login"
+  });
+  fireEvent.click(loginButton);
+
+  expect(onSubmit).toHaveBeenCalledWith(
+    "alex@gmail.com",
+    "123456"
+  );
+  
+});
+
+test("clears invalid email error when email changes", () => {
+  const onSubmit = jest.fn();
+
+  render (
+    <LoginForm 
+      onSubmit={onSubmit}
+    />
+  );
+
+  const emailInput = screen.getByRole("textbox", {
+    name: "Email"
+  });
+  fireEvent.change(emailInput, {
+    target: { value: "alex"}
+  });
+  
+  const loginButton = screen.getByRole("button", {
+    name: "Login"
+  });
+  
+  fireEvent.click(loginButton);
+
+  
+  fireEvent.change(emailInput, {
+    target: { value: "alex@gmail.com" }
+  });
+  
+  const errorInvalidEmailFormat = screen.queryByText("Invalid email format");
+
+  expect(errorInvalidEmailFormat).not.toBeInTheDocument();
+});
